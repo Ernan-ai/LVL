@@ -269,17 +269,24 @@ class _EncryptTabState extends State<EncryptTab> {
   }
   
   Future<void> _saveCredential() async {
-    if (_titleController.text.isEmpty || _inputController.text.isEmpty) {
+    if (_titleController.text.isEmpty || _encryptedText.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('! ERROR: Please enter title and password'),
+          content: Text('! ERROR: Need title and encrypted text'),
           backgroundColor: Colors.red,
         ),
       );
       return;
     }
 
-    await StorageService.saveCredential(_titleController.text, _encryptedText);
+    // Add new credential to list
+    final credentials = await StorageService.loadCredentials();
+    credentials.add({
+      'title': _titleController.text,
+      'username': '',
+      'password': _encryptedText,
+    });
+    await StorageService.saveCredentials(credentials);
     
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -325,27 +332,27 @@ class _EncryptTabState extends State<EncryptTab> {
                     TextField(
                       controller: _inputController,
                       maxLines: 5,
-                    style: const TextStyle(
-                      fontFamily: 'monospace',
-                      color: Colors.white,
+                      style: const TextStyle(
+                        fontFamily: 'monospace',
+                        color: Colors.white,
+                      ),
+                      decoration: const InputDecoration(
+                        hintText: 'enter_text_here...',
+                      ),
                     ),
-                    decoration: const InputDecoration(
-                      hintText: 'enter_text_here...',
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _encrypt,
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 48),
+                      ),
+                      child: const Text('> ENCRYPT'),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _encrypt,
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 48),
-                    ),
-                    child: const Text('> ENCRYPT'),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 16),
+            const SizedBox(height: 16),
           if (_encryptedText.isNotEmpty) ...[
             Card(
               child: Padding(
@@ -433,6 +440,7 @@ class _EncryptTabState extends State<EncryptTab> {
               ),
             ),
           ],
+          ],
         ),
       ),
     );
@@ -510,38 +518,38 @@ class _DecryptTabState extends State<DecryptTab> {
                   children: [
                     const Text(
                       '> ENCRYPTED INPUT',
-                    style: TextStyle(
-                      fontFamily: 'monospace',
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2,
+                      style: TextStyle(
+                        fontFamily: 'monospace',
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 2,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: _inputController,
-                    maxLines: 5,
-                    style: const TextStyle(
-                      fontFamily: 'monospace',
-                      color: Colors.white,
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: _inputController,
+                      maxLines: 5,
+                      style: const TextStyle(
+                        fontFamily: 'monospace',
+                        color: Colors.white,
+                      ),
+                      decoration: const InputDecoration(
+                        hintText: 'paste_encrypted_text...',
+                      ),
                     ),
-                    decoration: const InputDecoration(
-                      hintText: 'paste_encrypted_text...',
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _decrypt,
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 48),
+                      ),
+                      child: const Text('> DECRYPT'),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _decrypt,
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 48),
-                    ),
-                    child: const Text('> DECRYPT'),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 16),
+            const SizedBox(height: 16),
           if (_decryptedText.isNotEmpty) ...[
             Card(
               child: Padding(
@@ -589,6 +597,7 @@ class _DecryptTabState extends State<DecryptTab> {
                 ),
               ),
             ),
+          ],
           ],
         ),
       ),
