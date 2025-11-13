@@ -1,7 +1,7 @@
 """
-Generate iOS app icons with black background and ">/" text
+Generate iOS app icons with octopus skull logo
 """
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 import os
 
 # Icon sizes needed for iOS
@@ -23,53 +23,54 @@ icon_sizes = [
     ("Icon-App-1024x1024@1x.png", 1024),
 ]
 
+logo_path = "assets/images/logo.png"
 output_dir = "ios/Runner/Assets.xcassets/AppIcon.appiconset"
 
 def create_icon(size, filename):
-    """Create an icon with black background and '>/' text"""
+    """Create an icon with black background and octopus logo"""
     # Create black background
-    img = Image.new('RGB', (size, size), color='black')
-    draw = ImageDraw.Draw(img)
+    background = Image.new('RGB', (size, size), color='black')
     
-    # Calculate font size (roughly 40% of icon size)
-    font_size = int(size * 0.4)
-    
+    # Load the logo
     try:
-        # Try to use a monospace font
-        font = ImageFont.truetype("consola.ttf", font_size)
-    except:
-        try:
-            font = ImageFont.truetype("cour.ttf", font_size)
-        except:
-            # Fallback to default font
-            font = ImageFont.load_default()
+        logo = Image.open(logo_path).convert('RGBA')
+    except FileNotFoundError:
+        print(f"Error: Logo not found at {logo_path}")
+        print("Please ensure logo.png exists in assets/images/")
+        return
     
-    # Text to draw
-    text = ">/"
+    # Calculate logo size (80% of icon size with padding)
+    logo_size = int(size * 0.8)
+    logo_resized = logo.resize((logo_size, logo_size), Image.Resampling.LANCZOS)
     
-    # Get text bounding box for centering
-    bbox = draw.textbbox((0, 0), text, font=font)
-    text_width = bbox[2] - bbox[0]
-    text_height = bbox[3] - bbox[1]
+    # Calculate position to center logo
+    position = ((size - logo_size) // 2, (size - logo_size) // 2)
     
-    # Calculate position to center text
-    x = (size - text_width) // 2
-    y = (size - text_height) // 2 - bbox[1]  # Adjust for baseline
-    
-    # Draw white text
-    draw.text((x, y), text, fill='white', font=font)
+    # Paste logo onto background
+    # If logo has transparency, use it as mask
+    if logo_resized.mode == 'RGBA':
+        background.paste(logo_resized, position, logo_resized)
+    else:
+        background.paste(logo_resized, position)
     
     # Save the icon
     filepath = os.path.join(output_dir, filename)
-    img.save(filepath, 'PNG')
+    background.save(filepath, 'PNG')
     print(f"Created: {filename} ({size}x{size})")
 
 # Generate all icon sizes
-print("Generating iOS app icons...")
+print("Generating iOS app icons with octopus logo...")
+print(f"Logo source: {logo_path}")
 print(f"Output directory: {output_dir}\n")
+
+# Check if logo exists
+if not os.path.exists(logo_path):
+    print(f"❌ Error: Logo not found at {logo_path}")
+    print("Please add logo.png to assets/images/ folder first")
+    exit(1)
 
 for filename, size in icon_sizes:
     create_icon(size, filename)
 
-print("\n✓ All icons generated successfully!")
+print("\nAll icons generated successfully!")
 print("Icons are ready in: ios/Runner/Assets.xcassets/AppIcon.appiconset/")

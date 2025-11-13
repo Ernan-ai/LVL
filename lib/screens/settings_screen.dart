@@ -302,10 +302,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // User info card
-          Card(
+          SizedBox(
+            width: double.infinity,
+            child: Card(
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -388,11 +389,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ],
               ),
             ),
+            ),
           ),
           const SizedBox(height: 16),
           
           // Security section
-          Card(
+          SizedBox(
+            width: double.infinity,
+            child: Card(
             child: Column(
               children: [
                 ListTile(
@@ -429,11 +433,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ],
             ),
+            ),
           ),
           const SizedBox(height: 16),
           
           // App info
-          Card(
+          SizedBox(
+            width: double.infinity,
+            child: Card(
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -463,6 +470,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ],
               ),
+            ),
             ),
           ),
         ],
