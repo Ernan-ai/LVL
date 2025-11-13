@@ -17,6 +17,8 @@ class _SplashScreenState extends State<SplashScreen> {
   bool _showCursor = true;
   bool _showUsernameInput = false;
   bool _isTypingComplete = false;
+  bool _showWelcome = false;
+  String _username = '';
   final TextEditingController _usernameController = TextEditingController();
   Timer? _typeTimer;
   Timer? _cursorTimer;
@@ -97,13 +99,24 @@ class _SplashScreenState extends State<SplashScreen> {
       return;
     }
     
-    await StorageService.saveUsername(_usernameController.text.trim());
+    final username = _usernameController.text.trim();
+    await StorageService.saveUsername(username);
     
-    if (mounted) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const PasscodeScreen()),
-      );
-    }
+    // Show welcome message
+    setState(() {
+      _username = username;
+      _showUsernameInput = false;
+      _showWelcome = true;
+    });
+    
+    // Navigate after showing welcome
+    Timer(const Duration(seconds: 2), () {
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const PasscodeScreen()),
+        );
+      }
+    });
   }
 
   @override
@@ -133,7 +146,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     _displayedText,
                     style: const TextStyle(
                       fontFamily: 'monospace',
-                      fontSize: 48,
+                      fontSize: 36,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       letterSpacing: 4,
@@ -142,8 +155,8 @@ class _SplashScreenState extends State<SplashScreen> {
                   if (_showCursor && !_showUsernameInput)
                     Container(
                       margin: const EdgeInsets.only(left: 4),
-                      width: 16,
-                      height: 48,
+                      width: 14,
+                      height: 36,
                       color: Colors.white,
                     ),
                 ],
@@ -219,15 +232,15 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ],
               
-              // Version text (shown after typing is complete)
-              if (_isTypingComplete && !_showUsernameInput) ...[
-                const SizedBox(height: 16),
+              // Welcome message
+              if (_showWelcome) ...[
+                const SizedBox(height: 24),
                 Text(
-                  'ENCRYP v1.0.0',
-                  style: TextStyle(
+                  '> Welcome, $_username',
+                  style: const TextStyle(
                     fontFamily: 'monospace',
-                    fontSize: 12,
-                    color: Colors.white.withOpacity(0.5),
+                    fontSize: 18,
+                    color: Colors.white,
                     letterSpacing: 2,
                   ),
                 ),

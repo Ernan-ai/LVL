@@ -289,7 +289,7 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '🤫',
+                      '> HOW IT WORKS:',
                       style: TextStyle(
                         fontFamily: 'monospace',
                         color: Colors.white.withOpacity(0.9),
