@@ -370,7 +370,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'LVL ENCRYP v1.0.0\n'
+                    'LVL v1.0.0\n'
                     'Secure password encryption\n'
                     'using custom algorithms',
                     style: TextStyle(

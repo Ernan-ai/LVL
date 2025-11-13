@@ -15,7 +15,7 @@ class EncrypApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'LVL Encryp',
+      title: 'LVL',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: const ColorScheme.dark(
@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   void initState() {
     super.initState();
     _passcode = widget.passcode;
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
   
   @override
@@ -140,15 +140,25 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('> LVL ENCRYP'),
+        title: const Text('> LVL'),
         centerTitle: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const SettingsScreen()),
+              );
+            },
+            tooltip: 'Settings',
+          ),
+        ],
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
             Tab(text: '> ENCRYPT'),
             Tab(text: '> DECRYPT'),
             Tab(text: '> SAVED'),
-            Tab(text: '> SETTINGS'),
           ],
         ),
       ),
@@ -158,7 +168,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           EncryptTab(passcode: _passcode),
           DecryptTab(passcode: _passcode),
           SavedCredentialsTab(passcode: _passcode),
-          const SettingsScreen(),
         ],
       ),
     );
@@ -291,7 +300,7 @@ class _EncryptTabState extends State<EncryptTab> {
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 48),
                     ),
-                    child: const Text('🤫 > ENCRYPT'),
+                    child: const Text('> ENCRYPT'),
                   ),
                 ],
               ),
@@ -478,7 +487,7 @@ class _DecryptTabState extends State<DecryptTab> {
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 48),
                     ),
-                    child: const Text('🤫 > DECRYPT'),
+                    child: const Text('> DECRYPT'),
                   ),
                 ],
               ),
