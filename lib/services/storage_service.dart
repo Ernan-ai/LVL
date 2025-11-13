@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class StorageService {
   static const String _credentialsKey = 'encrypted_credentials';
   static const String _usernameKey = 'user_name';
+  static const String _profilePictureKey = 'profile_picture_path';
+  static const String _friendsKey = 'friends_list';
   
   /// Saves encrypted credentials to local storage
   static Future<void> saveCredentials(List<Map<String, String>> credentials) async {
@@ -53,5 +55,45 @@ class StorageService {
   static Future<bool> hasUsername() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.containsKey(_usernameKey);
+  }
+  
+  /// Saves profile picture path
+  static Future<void> saveProfilePicture(String path) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_profilePictureKey, path);
+  }
+  
+  /// Retrieves profile picture path
+  static Future<String?> getProfilePicture() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_profilePictureKey);
+  }
+  
+  /// Saves friends list (list of usernames)
+  static Future<void> saveFriends(List<String> friends) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(_friendsKey, friends);
+  }
+  
+  /// Loads friends list
+  static Future<List<String>> loadFriends() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getStringList(_friendsKey) ?? [];
+  }
+  
+  /// Adds a friend
+  static Future<void> addFriend(String friendUsername) async {
+    final friends = await loadFriends();
+    if (!friends.contains(friendUsername)) {
+      friends.add(friendUsername);
+      await saveFriends(friends);
+    }
+  }
+  
+  /// Removes a friend
+  static Future<void> removeFriend(String friendUsername) async {
+    final friends = await loadFriends();
+    friends.remove(friendUsername);
+    await saveFriends(friends);
   }
 }

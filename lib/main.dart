@@ -4,6 +4,7 @@ import 'services/encryption_service.dart';
 import 'services/storage_service.dart';
 import 'screens/splash_screen.dart';
 import 'screens/settings_screen.dart';
+import 'screens/friends_screen.dart';
 
 void main() {
   runApp(const EncrypApp());
@@ -127,7 +128,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   void initState() {
     super.initState();
     _passcode = widget.passcode;
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
   }
   
   @override
@@ -159,6 +160,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             Tab(text: '> ENCRYPT'),
             Tab(text: '> DECRYPT'),
             Tab(text: '> SAVED'),
+            Tab(text: '> FRIENDS'),
           ],
         ),
       ),
@@ -168,6 +170,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           EncryptTab(passcode: _passcode),
           DecryptTab(passcode: _passcode),
           SavedCredentialsTab(passcode: _passcode),
+          const FriendsScreen(),
         ],
       ),
     );

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 import '../services/passcode_service.dart';
 import '../services/storage_service.dart';
 
@@ -12,20 +15,54 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   String? _username;
+  String? _profilePicturePath;
   bool _isLoading = true;
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
-    _loadUsername();
+    _loadUserData();
   }
 
-  Future<void> _loadUsername() async {
+  Future<void> _loadUserData() async {
     final username = await StorageService.getUsername();
+    final profilePic = await StorageService.getProfilePicture();
     setState(() {
       _username = username;
+      _profilePicturePath = profilePic;
       _isLoading = false;
     });
+  }
+  
+  Future<void> _changeProfilePicture() async {
+    final XFile? image = await _picker.pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 512,
+      maxHeight: 512,
+      imageQuality: 85,
+    );
+    
+    if (image != null) {
+      // Copy image to app directory
+      final appDir = await getApplicationDocumentsDirectory();
+      final fileName = 'profile_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final savedImage = await File(image.path).copy('${appDir.path}/$fileName');
+      
+      await StorageService.saveProfilePicture(savedImage.path);
+      setState(() {
+        _profilePicturePath = savedImage.path;
+      });
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('> PROFILE PICTURE UPDATED'),
+            backgroundColor: Colors.white,
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _changePasscode() async {
@@ -272,25 +309,56 @@ class _SettingsScreenState extends State<SettingsScreen> {
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white, width: 3),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Center(
-                      child: Text(
-                        _username != null && _username!.isNotEmpty
-                            ? _username![0].toUpperCase()
-                            : '?',
-                        style: const TextStyle(
-                          fontFamily: 'monospace',
-                          fontSize: 36,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                  GestureDetector(
+                    onTap: _changeProfilePicture,
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white, width: 3),
+                            borderRadius: BorderRadius.circular(12),
+                            image: _profilePicturePath != null
+                                ? DecorationImage(
+                                    image: FileImage(File(_profilePicturePath!)),
+                                    fit: BoxFit.cover,
+                                  )
+                                : null,
+                          ),
+                          child: _profilePicturePath == null
+                              ? Center(
+                                  child: Text(
+                                    _username != null && _username!.isNotEmpty
+                                        ? _username![0].toUpperCase()
+                                        : '?',
+                                    style: const TextStyle(
+                                      fontFamily: 'monospace',
+                                      fontSize: 36,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )
+                              : null,
                         ),
-                      ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: const Icon(
+                              Icons.camera_alt,
+                              size: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 16),
