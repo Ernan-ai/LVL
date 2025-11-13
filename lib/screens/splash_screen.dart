@@ -12,7 +12,7 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
   String _displayedText = '> ';
   final String _targetText = 'LVL';
   int _currentIndex = 0;
@@ -32,11 +32,39 @@ class _SplashScreenState extends State<SplashScreen> {
   Timer? _typeTimer;
   Timer? _cursorTimer;
   Timer? _helloTimer;
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
 
   @override
   void initState() {
     super.initState();
     _checkExistingUsername();
+    
+    // Animation controller
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
+    
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
+      ),
+    );
+    
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.3),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(0.3, 1.0, curve: Curves.easeOut),
+      ),
+    );
+    
+    _animationController.forward();
     
     // Blinking cursor effect
     _cursorTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
@@ -47,8 +75,8 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     });
     
-    // Start typewriter effect after a short delay
-    Timer(const Duration(milliseconds: 500), () {
+    // Start typewriter effect after animation
+    Timer(const Duration(milliseconds: 800), () {
       _startTypewriter();
     });
   }
@@ -173,6 +201,7 @@ class _SplashScreenState extends State<SplashScreen> {
     _typeTimer?.cancel();
     _cursorTimer?.cancel();
     _helloTimer?.cancel();
+    _animationController.dispose();
     _usernameController.dispose();
     super.dispose();
   }
@@ -184,13 +213,17 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(32),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Logo image
-              Center(
-                child: Image.asset(
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: SlideTransition(
+              position: _slideAnimation,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Logo image
+                  Center(
+                    child: Image.asset(
                   'assets/images/logo.png',
                   width: 180,
                   height: 180,
@@ -329,6 +362,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ],
             ],
+              ),
+            ),
           ),
         ),
       ),

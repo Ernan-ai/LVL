@@ -278,25 +278,17 @@ class _EncryptTabState extends State<EncryptTab> {
       );
       return;
     }
-    
-    List<Map<String, String>> credentials = await StorageService.loadCredentials();
-    credentials.add({
-      'title': _titleController.text,
-      'username': '',
-      'password': _encryptedText.isEmpty 
-        ? EncryptionService.encrypt(_inputController.text, widget.passcode) 
-        : _encryptedText,
-    });
-    
-    await StorageService.saveCredentials(credentials);
+
+    await StorageService.saveCredential(_titleController.text, _encryptedText);
     
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('> CREDENTIAL SAVED'),
+          content: Text('> SAVED'),
           backgroundColor: Colors.white,
         ),
       );
+      
       _titleController.clear();
       _inputController.clear();
       setState(() {
@@ -307,30 +299,32 @@ class _EncryptTabState extends State<EncryptTab> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    '> INPUT TEXT',
-                    style: TextStyle(
-                      fontFamily: 'monospace',
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '> INPUT TEXT',
+                      style: TextStyle(
+                        fontFamily: 'monospace',
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 2,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: _inputController,
-                    maxLines: 5,
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: _inputController,
+                      maxLines: 5,
                     style: const TextStyle(
                       fontFamily: 'monospace',
                       color: Colors.white,
@@ -439,7 +433,7 @@ class _EncryptTabState extends State<EncryptTab> {
               ),
             ),
           ],
-        ],
+        ),
       ),
     );
   }
@@ -501,19 +495,21 @@ class _DecryptTabState extends State<DecryptTab> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    '> ENCRYPTED INPUT',
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '> ENCRYPTED INPUT',
                     style: TextStyle(
                       fontFamily: 'monospace',
                       fontSize: 14,
@@ -594,7 +590,7 @@ class _DecryptTabState extends State<DecryptTab> {
               ),
             ),
           ],
-        ],
+        ),
       ),
     );
   }

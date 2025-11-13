@@ -59,37 +59,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Logo
-            Center(
-              child: Image.asset(
-                'assets/images/logo.png',
-                width: 80,
-                height: 80,
-                color: kSoftWhite,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: kSoftWhite, width: 2),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'LVL',
-                        style: TextStyle(
-                          fontFamily: 'monospace',
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: kSoftWhite,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 24),
             // Welcome header
             Card(
               child: Padding(

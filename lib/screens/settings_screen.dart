@@ -14,15 +14,45 @@ class SettingsScreen extends StatefulWidget {
   State<SettingsScreen> createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _SettingsScreenState extends State<SettingsScreen> with SingleTickerProviderStateMixin {
   String? _username;
   String? _profilePicturePath;
   bool _isLoading = true;
   final ImagePicker _picker = ImagePicker();
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation1;
+  late Animation<double> _fadeAnimation2;
+  late Animation<double> _fadeAnimation3;
 
   @override
   void initState() {
     super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    
+    _fadeAnimation1 = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
+      ),
+    );
+    
+    _fadeAnimation2 = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(0.3, 0.7, curve: Curves.easeOut),
+      ),
+    );
+    
+    _fadeAnimation3 = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(0.5, 1.0, curve: Curves.easeOut),
+      ),
+    );
+    
     _loadUserData();
   }
 
@@ -34,6 +64,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _profilePicturePath = profilePic;
       _isLoading = false;
     });
+    _animationController.forward();
+  }
+  
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
   
   Future<void> _changeProfilePicture() async {
@@ -306,8 +343,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
           // User info card
-          Card(
-            child: Padding(
+          FadeTransition(
+            opacity: _fadeAnimation1,
+            child: Card(
+              child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -390,12 +429,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ],
               ),
             ),
+            ),
           ),
           const SizedBox(height: 16),
           
           // Security section
-          Card(
-            child: Column(
+          FadeTransition(
+            opacity: _fadeAnimation2,
+            child: Card(
+              child: Column(
               children: [
                 ListTile(
                   contentPadding: const EdgeInsets.all(16),
@@ -431,12 +473,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ],
             ),
+            ),
           ),
           const SizedBox(height: 16),
           
           // App info
-          Card(
-            child: Padding(
+          FadeTransition(
+            opacity: _fadeAnimation3,
+            child: Card(
+              child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -465,6 +510,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ],
               ),
+            ),
             ),
           ),
         ],
