@@ -46,13 +46,10 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _checkExistingUsername() async {
     final hasUsername = await StorageService.hasUsername();
     if (hasUsername && mounted) {
-      // If username exists, skip to passcode screen after animation
-      Timer(const Duration(seconds: 2), () {
-        if (mounted) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const PasscodeScreen()),
-          );
-        }
+      // Load username and show welcome message
+      final username = await StorageService.getUsername();
+      setState(() {
+        _username = username ?? '';
       });
     }
   }
@@ -66,13 +63,28 @@ class _SplashScreenState extends State<SplashScreen> {
         });
       } else {
         timer.cancel();
-        // After typing is complete, show username input
+        // After typing is complete
         Timer(const Duration(milliseconds: 500), () {
           setState(() {
             _isTypingComplete = true;
           });
-          // Check if we should show username input
-          _checkAndShowUsernameInput();
+          // Check if username exists
+          if (_username.isNotEmpty) {
+            // Show welcome and navigate
+            setState(() {
+              _showWelcome = true;
+            });
+            Timer(const Duration(seconds: 2), () {
+              if (mounted) {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => const PasscodeScreen()),
+                );
+              }
+            });
+          } else {
+            // Show username input
+            _checkAndShowUsernameInput();
+          }
         });
       }
     });
