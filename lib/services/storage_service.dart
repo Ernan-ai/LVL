@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Service for storing and retrieving encrypted login credentials
 class StorageService {
   static const String _credentialsKey = 'encrypted_credentials';
+  static const String _usernameKey = 'user_name';
   
   /// Saves encrypted credentials to local storage
   static Future<void> saveCredentials(List<Map<String, String>> credentials) async {
@@ -34,5 +35,23 @@ class StorageService {
   static Future<void> clearCredentials() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_credentialsKey);
+  }
+  
+  /// Saves username to local storage
+  static Future<void> saveUsername(String username) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_usernameKey, username);
+  }
+  
+  /// Retrieves username from local storage
+  static Future<String?> getUsername() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_usernameKey);
+  }
+  
+  /// Checks if username exists
+  static Future<bool> hasUsername() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.containsKey(_usernameKey);
   }
 }

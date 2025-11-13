@@ -45,7 +45,7 @@ class EncrypApp extends StatelessWidget {
           color: Colors.black,
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
+            borderRadius: BorderRadius.all(Radius.circular(16)),
             side: BorderSide(color: Colors.white, width: 2),
           ),
         ),
@@ -53,15 +53,15 @@ class EncrypApp extends StatelessWidget {
           filled: true,
           fillColor: Colors.black,
           border: const OutlineInputBorder(
-            borderRadius: BorderRadius.zero,
+            borderRadius: BorderRadius.all(Radius.circular(12)),
             borderSide: BorderSide(color: Colors.white, width: 2),
           ),
           enabledBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.zero,
+            borderRadius: BorderRadius.all(Radius.circular(12)),
             borderSide: BorderSide(color: Colors.white, width: 2),
           ),
           focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.zero,
+            borderRadius: BorderRadius.all(Radius.circular(12)),
             borderSide: BorderSide(color: Colors.white, width: 3),
           ),
           labelStyle: const TextStyle(
@@ -86,7 +86,7 @@ class EncrypApp extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.white,
             foregroundColor: Colors.black,
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
             textStyle: const TextStyle(
               fontFamily: 'monospace',
               fontWeight: FontWeight.bold,
@@ -584,7 +584,7 @@ class _SavedCredentialsTabState extends State<SavedCredentialsTab> {
       builder: (context) => AlertDialog(
         backgroundColor: Colors.black,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.zero,
+          borderRadius: BorderRadius.all(Radius.circular(16)),
           side: BorderSide(color: Colors.white, width: 2),
         ),
         title: const Text(
@@ -620,13 +620,19 @@ class _SavedCredentialsTabState extends State<SavedCredentialsTab> {
                 const SnackBar(
                   content: Text('> PASSWORD COPIED'),
                   backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                  ),
                 ),
               );
             },
             style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.white,
+              foregroundColor: Colors.black,
+              backgroundColor: Colors.white,
               side: const BorderSide(color: Colors.white, width: 2),
-              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+              ),
             ),
             child: const Text(
               '> COPY',
@@ -642,7 +648,7 @@ class _SavedCredentialsTabState extends State<SavedCredentialsTab> {
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.white,
               side: const BorderSide(color: Colors.white, width: 2),
-              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
             ),
             child: const Text(
               '> CLOSE',

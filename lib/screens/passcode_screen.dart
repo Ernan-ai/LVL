@@ -165,15 +165,19 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                     letterSpacing: 2,
                   ),
                   enabledBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
                     borderSide: BorderSide(color: Colors.white, width: 2),
                   ),
                   focusedBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
                     borderSide: BorderSide(color: Colors.white, width: 3),
                   ),
                   errorBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
                     borderSide: BorderSide(color: Colors.red, width: 2),
                   ),
                   focusedErrorBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
                     borderSide: BorderSide(color: Colors.red, width: 3),
                   ),
                   suffixIcon: IconButton(
@@ -212,9 +216,11 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                       letterSpacing: 2,
                     ),
                     enabledBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
                       borderSide: BorderSide(color: Colors.white, width: 2),
                     ),
                     focusedBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
                       borderSide: BorderSide(color: Colors.white, width: 3),
                     ),
                   ),
@@ -234,7 +240,7 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                     backgroundColor: Colors.white,
                     side: const BorderSide(color: Colors.white, width: 2),
                     shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
                   ),
                   child: Text(
@@ -256,6 +262,7 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.red, width: 2),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
                     '! ERROR: $_errorMessage',
@@ -276,12 +283,13 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '> HOW IT WORKS:',
+                      '🤫',
                       style: TextStyle(
                         fontFamily: 'monospace',
                         color: Colors.white.withOpacity(0.9),
