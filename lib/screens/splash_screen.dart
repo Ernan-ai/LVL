@@ -19,6 +19,9 @@ class _SplashScreenState extends State<SplashScreen> {
   bool _isTypingComplete = false;
   bool _showWelcome = false;
   String _username = '';
+  String _welcomeText = '';
+  String _fullWelcomeText = '';
+  int _welcomeIndex = 0;
   final TextEditingController _usernameController = TextEditingController();
   Timer? _typeTimer;
   Timer? _cursorTimer;
@@ -70,17 +73,12 @@ class _SplashScreenState extends State<SplashScreen> {
           });
           // Check if username exists
           if (_username.isNotEmpty) {
-            // Show welcome and navigate
+            // Show welcome with typewriter effect
             setState(() {
               _showWelcome = true;
+              _fullWelcomeText = '> Welcome, $_username';
             });
-            Timer(const Duration(seconds: 2), () {
-              if (mounted) {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (_) => const PasscodeScreen()),
-                );
-              }
-            });
+            _startWelcomeTypewriter();
           } else {
             // Show username input
             _checkAndShowUsernameInput();
@@ -114,19 +112,34 @@ class _SplashScreenState extends State<SplashScreen> {
     final username = _usernameController.text.trim();
     await StorageService.saveUsername(username);
     
-    // Show welcome message
+    // Show welcome message with typewriter
     setState(() {
       _username = username;
       _showUsernameInput = false;
       _showWelcome = true;
+      _fullWelcomeText = '> Welcome, $username';
     });
     
-    // Navigate after showing welcome
-    Timer(const Duration(seconds: 2), () {
-      if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const PasscodeScreen()),
-        );
+    _startWelcomeTypewriter();
+  }
+
+  void _startWelcomeTypewriter() {
+    Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      if (_welcomeIndex < _fullWelcomeText.length) {
+        setState(() {
+          _welcomeText += _fullWelcomeText[_welcomeIndex];
+          _welcomeIndex++;
+        });
+      } else {
+        timer.cancel();
+        // Navigate after typing complete
+        Timer(const Duration(seconds: 1), () {
+          if (mounted) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (_) => const PasscodeScreen()),
+            );
+          }
+        });
       }
     });
   }
@@ -244,11 +257,11 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ],
               
-              // Welcome message
+              // Welcome message with typewriter
               if (_showWelcome) ...[
                 const SizedBox(height: 24),
                 Text(
-                  '> Welcome, $_username',
+                  _welcomeText,
                   style: const TextStyle(
                     fontFamily: 'monospace',
                     fontSize: 18,

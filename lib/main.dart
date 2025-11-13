@@ -5,6 +5,7 @@ import 'services/storage_service.dart';
 import 'screens/splash_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/friends_screen.dart';
+import 'screens/home_screen.dart';
 
 void main() {
   runApp(const EncrypApp());
@@ -120,21 +121,24 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+class _HomePageState extends State<HomePage> {
   late String _passcode;
+  int _selectedIndex = 0;
   
   @override
   void initState() {
     super.initState();
     _passcode = widget.passcode;
-    _tabController = TabController(length: 4, vsync: this);
   }
-  
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+
+  List<Widget> _getScreens() {
+    return [
+      const HomeScreen(),
+      EncryptTab(passcode: _passcode),
+      DecryptTab(passcode: _passcode),
+      SavedCredentialsTab(passcode: _passcode),
+      const FriendsScreen(),
+    ];
   }
 
   @override
@@ -154,23 +158,50 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             tooltip: 'Settings',
           ),
         ],
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: const [
-            Tab(text: '> ENCRYPT'),
-            Tab(text: '> DECRYPT'),
-            Tab(text: '> SAVED'),
-            Tab(text: '> FRIENDS'),
-          ],
-        ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          EncryptTab(passcode: _passcode),
-          DecryptTab(passcode: _passcode),
-          SavedCredentialsTab(passcode: _passcode),
-          const FriendsScreen(),
+      body: _getScreens()[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.black,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white.withOpacity(0.5),
+        selectedLabelStyle: const TextStyle(
+          fontFamily: 'monospace',
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+          letterSpacing: 1,
+        ),
+        unselectedLabelStyle: const TextStyle(
+          fontFamily: 'monospace',
+          fontSize: 10,
+        ),
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'HOME',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.lock),
+            label: 'ENCRYPT',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.lock_open),
+            label: 'DECRYPT',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.save),
+            label: 'SAVED',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            label: 'FRIENDS',
+          ),
         ],
       ),
     );
@@ -198,7 +229,7 @@ class _EncryptTabState extends State<EncryptTab> {
     super.dispose();
   }
   
-  void _encrypt() {
+  Future<void> _encrypt() async {
     if (_inputController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -209,8 +240,15 @@ class _EncryptTabState extends State<EncryptTab> {
       return;
     }
     
+    final inputText = _inputController.text;
+    final encrypted = EncryptionService.encrypt(inputText, widget.passcode);
+    
+    // Track statistics
+    await StorageService.incrementEncryptCount();
+    await StorageService.addEncryptedBytes(inputText.length);
+    
     setState(() {
-      _encryptedText = EncryptionService.encrypt(_inputController.text, widget.passcode);
+      _encryptedText = encrypted;
     });
   }
   
@@ -422,7 +460,7 @@ class _DecryptTabState extends State<DecryptTab> {
     super.dispose();
   }
   
-  void _decrypt() {
+  Future<void> _decrypt() async {
     if (_inputController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -433,8 +471,15 @@ class _DecryptTabState extends State<DecryptTab> {
       return;
     }
     
+    final inputText = _inputController.text;
+    final decrypted = EncryptionService.decrypt(inputText, widget.passcode);
+    
+    // Track statistics
+    await StorageService.incrementDecryptCount();
+    await StorageService.addDecryptedBytes(decrypted.length);
+    
     setState(() {
-      _decryptedText = EncryptionService.decrypt(_inputController.text, widget.passcode);
+      _decryptedText = decrypted;
     });
   }
   

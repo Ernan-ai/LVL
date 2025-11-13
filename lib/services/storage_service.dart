@@ -6,6 +6,10 @@ class StorageService {
   static const String _usernameKey = 'user_name';
   static const String _profilePictureKey = 'profile_picture_path';
   static const String _friendsKey = 'friends_list';
+  static const String _encryptCountKey = 'encrypt_count';
+  static const String _decryptCountKey = 'decrypt_count';
+  static const String _encryptedBytesKey = 'encrypted_bytes';
+  static const String _decryptedBytesKey = 'decrypted_bytes';
   
   /// Saves encrypted credentials to local storage
   static Future<void> saveCredentials(List<Map<String, String>> credentials) async {
@@ -95,5 +99,44 @@ class StorageService {
     final friends = await loadFriends();
     friends.remove(friendUsername);
     await saveFriends(friends);
+  }
+  
+  /// Increments encryption count
+  static Future<void> incrementEncryptCount() async {
+    final prefs = await SharedPreferences.getInstance();
+    final current = prefs.getInt(_encryptCountKey) ?? 0;
+    await prefs.setInt(_encryptCountKey, current + 1);
+  }
+  
+  /// Increments decryption count
+  static Future<void> incrementDecryptCount() async {
+    final prefs = await SharedPreferences.getInstance();
+    final current = prefs.getInt(_decryptCountKey) ?? 0;
+    await prefs.setInt(_decryptCountKey, current + 1);
+  }
+  
+  /// Adds encrypted bytes to total
+  static Future<void> addEncryptedBytes(int bytes) async {
+    final prefs = await SharedPreferences.getInstance();
+    final current = prefs.getInt(_encryptedBytesKey) ?? 0;
+    await prefs.setInt(_encryptedBytesKey, current + bytes);
+  }
+  
+  /// Adds decrypted bytes to total
+  static Future<void> addDecryptedBytes(int bytes) async {
+    final prefs = await SharedPreferences.getInstance();
+    final current = prefs.getInt(_decryptedBytesKey) ?? 0;
+    await prefs.setInt(_decryptedBytesKey, current + bytes);
+  }
+  
+  /// Gets encryption statistics
+  static Future<Map<String, int>> getStatistics() async {
+    final prefs = await SharedPreferences.getInstance();
+    return {
+      'encryptCount': prefs.getInt(_encryptCountKey) ?? 0,
+      'decryptCount': prefs.getInt(_decryptCountKey) ?? 0,
+      'encryptedBytes': prefs.getInt(_encryptedBytesKey) ?? 0,
+      'decryptedBytes': prefs.getInt(_decryptedBytesKey) ?? 0,
+    };
   }
 }
