@@ -311,11 +311,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  GestureDetector(
-                    onTap: _changeProfilePicture,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
+                  Center(
+                    child: GestureDetector(
+                      onTap: _changeProfilePicture,
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
                         Container(
                           width: 80,
                           height: 80,
@@ -331,16 +332,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                           child: _profilePicturePath == null
                               ? Center(
-                                  child: Text(
-                                    _username != null && _username!.isNotEmpty
-                                        ? _username![0].toUpperCase()
-                                        : '?',
-                                    style: const TextStyle(
-                                      fontFamily: 'monospace',
-                                      fontSize: 36,
-                                      fontWeight: FontWeight.bold,
-                                      color: kSoftWhite,
-                                    ),
+                                  child: Image.asset(
+                                    'assets/images/logo.png',
+                                    width: 50,
+                                    height: 50,
+                                    color: kSoftWhite,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Text(
+                                        _username != null && _username!.isNotEmpty
+                                            ? _username![0].toUpperCase()
+                                            : '?',
+                                        style: const TextStyle(
+                                          fontFamily: 'monospace',
+                                          fontSize: 36,
+                                          fontWeight: FontWeight.bold,
+                                          color: kSoftWhite,
+                                        ),
+                                      );
+                                    },
                                   ),
                                 )
                               : null,
@@ -362,6 +371,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ),
                       ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),

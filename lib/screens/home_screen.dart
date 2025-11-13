@@ -112,16 +112,24 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: _profilePicturePath == null
                           ? Center(
-                              child: Text(
-                                _username != null && _username!.isNotEmpty
-                                    ? _username![0].toUpperCase()
-                                    : '?',
-                                style: const TextStyle(
-                                  fontFamily: 'monospace',
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: kSoftWhite,
-                                ),
+                              child: Image.asset(
+                                'assets/images/logo.png',
+                                width: 40,
+                                height: 40,
+                                color: kSoftWhite,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Text(
+                                    _username != null && _username!.isNotEmpty
+                                        ? _username![0].toUpperCase()
+                                        : '?',
+                                    style: const TextStyle(
+                                      fontFamily: 'monospace',
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: kSoftWhite,
+                                    ),
+                                  );
+                                },
                               ),
                             )
                           : null,

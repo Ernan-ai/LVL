@@ -24,9 +24,14 @@ class _SplashScreenState extends State<SplashScreen> {
   String _welcomeText = '';
   String _fullWelcomeText = '';
   int _welcomeIndex = 0;
+  String _helloText = '';
+  final String _fullHelloText = '> Hello ';
+  int _helloIndex = 0;
+  bool _helloTypingComplete = false;
   final TextEditingController _usernameController = TextEditingController();
   Timer? _typeTimer;
   Timer? _cursorTimer;
+  Timer? _helloTimer;
 
   @override
   void initState() {
@@ -96,7 +101,24 @@ class _SplashScreenState extends State<SplashScreen> {
       setState(() {
         _showUsernameInput = true;
       });
+      _startHelloTypewriter();
     }
+  }
+
+  void _startHelloTypewriter() {
+    _helloTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      if (_helloIndex < _fullHelloText.length) {
+        setState(() {
+          _helloText += _fullHelloText[_helloIndex];
+          _helloIndex++;
+        });
+      } else {
+        timer.cancel();
+        setState(() {
+          _helloTypingComplete = true;
+        });
+      }
+    });
   }
 
   Future<void> _handleUsernameSubmit() async {
@@ -150,6 +172,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void dispose() {
     _typeTimer?.cancel();
     _cursorTimer?.cancel();
+    _helloTimer?.cancel();
     _usernameController.dispose();
     super.dispose();
   }
@@ -169,14 +192,14 @@ class _SplashScreenState extends State<SplashScreen> {
               Center(
                 child: Image.asset(
                   'assets/images/logo.png',
-                  width: 120,
-                  height: 120,
+                  width: 180,
+                  height: 180,
                   color: kSoftWhite,
                   errorBuilder: (context, error, stackTrace) {
                     // Fallback if image not found
                     return Container(
-                      width: 120,
-                      height: 120,
+                      width: 180,
+                      height: 180,
                       decoration: BoxDecoration(
                         border: Border.all(color: kSoftWhite, width: 2),
                         shape: BoxShape.circle,
@@ -186,7 +209,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           'LVL',
                           style: TextStyle(
                             fontFamily: 'monospace',
-                            fontSize: 24,
+                            fontSize: 32,
                             fontWeight: FontWeight.bold,
                             color: kSoftWhite,
                           ),
@@ -226,19 +249,20 @@ class _SplashScreenState extends State<SplashScreen> {
                 const SizedBox(height: 24),
                 Row(
                   children: [
-                    const Text(
-                      '> Hello ',
-                      style: TextStyle(
+                    Text(
+                      _helloText,
+                      style: const TextStyle(
                         fontFamily: 'monospace',
                         fontSize: 20,
                         color: kSoftWhite,
                         letterSpacing: 2,
                       ),
                     ),
-                    Expanded(
-                      child: TextField(
-                        controller: _usernameController,
-                        autofocus: true,
+                    if (_helloTypingComplete)
+                      Expanded(
+                        child: TextField(
+                          controller: _usernameController,
+                          autofocus: true,
                         style: const TextStyle(
                           fontFamily: 'monospace',
                           fontSize: 20,
