@@ -25,6 +25,18 @@ jobs:
       - name: Build iOS (no codesign)
         run: flutter build ios --release --no-codesign
       
+      - name: Fix Info.plist variables
+        run: |
+          INFO_PLIST="build/ios/iphoneos/Runner.app/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString 1.0.0" "$INFO_PLIST"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion 1" "$INFO_PLIST"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleExecutable Runner" "$INFO_PLIST"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier com.lvl.encryp" "$INFO_PLIST"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleName encryp_app" "$INFO_PLIST"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleDevelopmentRegion en" "$INFO_PLIST"
+          echo "Info.plist fixed:"
+          cat "$INFO_PLIST"
+      
       - name: Upload .app folder (raw)
         uses: actions/upload-artifact@v4
         with:
