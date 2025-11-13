@@ -27,7 +27,7 @@ logo_path = "assets/images/logo.png"
 output_dir = "ios/Runner/Assets.xcassets/AppIcon.appiconset"
 
 def create_icon(size, filename):
-    """Create an icon with black background and octopus logo"""
+    """Create an icon with black background and white octopus logo"""
     # Create black background
     background = Image.new('RGB', (size, size), color='black')
     
@@ -38,6 +38,17 @@ def create_icon(size, filename):
         print(f"Error: Logo not found at {logo_path}")
         print("Please ensure logo.png exists in assets/images/")
         return
+    
+    # Invert colors: convert black to white for visibility
+    # Get pixel data
+    pixels = logo.load()
+    width, height = logo.size
+    
+    for y in range(height):
+        for x in range(width):
+            r, g, b, a = pixels[x, y]
+            # Invert RGB while keeping alpha
+            pixels[x, y] = (255 - r, 255 - g, 255 - b, a)
     
     # Calculate logo size (80% of icon size with padding)
     logo_size = int(size * 0.8)

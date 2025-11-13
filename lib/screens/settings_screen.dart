@@ -304,12 +304,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
       child: Column(
         children: [
           // User info card
-          SizedBox(
-            width: double.infinity,
-            child: Card(
+          Card(
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Center(
@@ -389,14 +388,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ],
               ),
             ),
-            ),
           ),
           const SizedBox(height: 16),
           
           // Security section
-          SizedBox(
-            width: double.infinity,
-            child: Card(
+          Card(
             child: Column(
               children: [
                 ListTile(
@@ -433,14 +429,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ],
             ),
-            ),
           ),
           const SizedBox(height: 16),
           
           // App info
-          SizedBox(
-            width: double.infinity,
-            child: Card(
+          Card(
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -470,7 +463,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ],
               ),
-            ),
             ),
           ),
         ],
