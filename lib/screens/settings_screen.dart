@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import '../services/passcode_service.dart';
 import '../services/storage_service.dart';
+import '../main.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -58,7 +59,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('> PROFILE PICTURE UPDATED'),
-            backgroundColor: Colors.white,
+            backgroundColor: kSoftWhite,
           ),
         );
       }
@@ -76,13 +77,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
         backgroundColor: Colors.black,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16)),
-          side: BorderSide(color: Colors.white, width: 2),
+          side: BorderSide(color: kSoftWhite, width: 2),
         ),
         title: const Text(
           '> CHANGE PASSCODE',
           style: TextStyle(
             fontFamily: 'monospace',
-            color: Colors.white,
+            color: kSoftWhite,
             fontWeight: FontWeight.bold,
             letterSpacing: 2,
             fontSize: 16,
@@ -99,23 +100,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 style: const TextStyle(
                   fontFamily: 'monospace',
-                  color: Colors.white,
+                  color: kSoftWhite,
                   fontSize: 16,
                 ),
                 decoration: const InputDecoration(
                   labelText: 'CURRENT PASSCODE',
                   labelStyle: TextStyle(
                     fontFamily: 'monospace',
-                    color: Colors.white,
+                    color: kSoftWhite,
                     fontSize: 12,
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(12)),
-                    borderSide: BorderSide(color: Colors.white, width: 2),
+                    borderSide: BorderSide(color: kSoftWhite, width: 2),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(12)),
-                    borderSide: BorderSide(color: Colors.white, width: 3),
+                    borderSide: BorderSide(color: kSoftWhite, width: 3),
                   ),
                 ),
               ),
@@ -127,23 +128,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 style: const TextStyle(
                   fontFamily: 'monospace',
-                  color: Colors.white,
+                  color: kSoftWhite,
                   fontSize: 16,
                 ),
                 decoration: const InputDecoration(
                   labelText: 'NEW PASSCODE',
                   labelStyle: TextStyle(
                     fontFamily: 'monospace',
-                    color: Colors.white,
+                    color: kSoftWhite,
                     fontSize: 12,
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(12)),
-                    borderSide: BorderSide(color: Colors.white, width: 2),
+                    borderSide: BorderSide(color: kSoftWhite, width: 2),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(12)),
-                    borderSide: BorderSide(color: Colors.white, width: 3),
+                    borderSide: BorderSide(color: kSoftWhite, width: 3),
                   ),
                 ),
               ),
@@ -155,23 +156,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 style: const TextStyle(
                   fontFamily: 'monospace',
-                  color: Colors.white,
+                  color: kSoftWhite,
                   fontSize: 16,
                 ),
                 decoration: const InputDecoration(
                   labelText: 'CONFIRM NEW PASSCODE',
                   labelStyle: TextStyle(
                     fontFamily: 'monospace',
-                    color: Colors.white,
+                    color: kSoftWhite,
                     fontSize: 12,
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(12)),
-                    borderSide: BorderSide(color: Colors.white, width: 2),
+                    borderSide: BorderSide(color: kSoftWhite, width: 2),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(12)),
-                    borderSide: BorderSide(color: Colors.white, width: 3),
+                    borderSide: BorderSide(color: kSoftWhite, width: 3),
                   ),
                 ),
               ),
@@ -182,8 +183,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           OutlinedButton(
             onPressed: () => Navigator.pop(context),
             style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.white,
-              side: const BorderSide(color: Colors.white, width: 2),
+              foregroundColor: kSoftWhite,
+              side: const BorderSide(color: kSoftWhite, width: 2),
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(12)),
               ),
@@ -263,15 +264,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('> PASSCODE CHANGED SUCCESSFULLY'),
-                    backgroundColor: Colors.white,
+                    backgroundColor: kSoftWhite,
                   ),
                 );
               }
             },
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.black,
-              backgroundColor: Colors.white,
-              side: const BorderSide(color: Colors.white, width: 2),
+              backgroundColor: kSoftWhite,
+              side: const BorderSide(color: kSoftWhite, width: 2),
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(12)),
               ),
@@ -294,7 +295,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return const Center(
-        child: CircularProgressIndicator(color: Colors.white),
+        child: CircularProgressIndicator(color: kSoftWhite),
       );
     }
 
@@ -313,12 +314,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   GestureDetector(
                     onTap: _changeProfilePicture,
                     child: Stack(
+                      alignment: Alignment.center,
                       children: [
                         Container(
                           width: 80,
                           height: 80,
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white, width: 3),
+                            border: Border.all(color: kSoftWhite, width: 3),
                             borderRadius: BorderRadius.circular(12),
                             image: _profilePicturePath != null
                                 ? DecorationImage(
@@ -337,7 +339,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       fontFamily: 'monospace',
                                       fontSize: 36,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                      color: kSoftWhite,
                                     ),
                                   ),
                                 )
@@ -349,7 +351,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           child: Container(
                             padding: const EdgeInsets.all(4),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: kSoftWhite,
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: const Icon(
@@ -369,7 +371,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       fontFamily: 'monospace',
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: kSoftWhite,
                       letterSpacing: 2,
                     ),
                   ),
@@ -389,17 +391,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white, width: 2),
+                      border: Border.all(color: kSoftWhite, width: 2),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Icon(Icons.lock, color: Colors.white),
+                    child: const Icon(Icons.lock, color: kSoftWhite),
                   ),
                   title: const Text(
                     '> CHANGE PASSCODE',
                     style: TextStyle(
                       fontFamily: 'monospace',
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: kSoftWhite,
                       fontSize: 14,
                       letterSpacing: 1,
                     ),
@@ -408,11 +410,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     'Update your master passcode',
                     style: TextStyle(
                       fontFamily: 'monospace',
-                      color: Colors.white.withOpacity(0.5),
+                      color: kSoftWhite.withOpacity(0.5),
                       fontSize: 11,
                     ),
                   ),
-                  trailing: const Icon(Icons.chevron_right, color: Colors.white),
+                  trailing: const Icon(Icons.chevron_right, color: kSoftWhite),
                   onTap: _changePasscode,
                 ),
               ],
@@ -431,7 +433,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     '> ABOUT',
                     style: TextStyle(
                       fontFamily: 'monospace',
-                      color: Colors.white.withOpacity(0.9),
+                      color: kSoftWhite.withOpacity(0.9),
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1,
@@ -444,7 +446,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     'using custom algorithms',
                     style: TextStyle(
                       fontFamily: 'monospace',
-                      color: Colors.white.withOpacity(0.5),
+                      color: kSoftWhite.withOpacity(0.5),
                       fontSize: 11,
                       height: 1.5,
                     ),

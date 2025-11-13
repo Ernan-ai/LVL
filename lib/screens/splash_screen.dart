@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'passcode_screen.dart';
+import 'package:flutter/services.dart';
 import '../services/storage_service.dart';
+import 'passcode_screen.dart';
+import '../main.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -163,6 +165,38 @@ class _SplashScreenState extends State<SplashScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Logo image
+              Center(
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  width: 120,
+                  height: 120,
+                  color: kSoftWhite,
+                  errorBuilder: (context, error, stackTrace) {
+                    // Fallback if image not found
+                    return Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: kSoftWhite, width: 2),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'LVL',
+                          style: TextStyle(
+                            fontFamily: 'monospace',
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: kSoftWhite,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 32),
               // Typewriter "LVL" text
               Row(
                 mainAxisSize: MainAxisSize.min,
@@ -173,7 +207,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       fontFamily: 'monospace',
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: kSoftWhite,
                       letterSpacing: 4,
                     ),
                   ),
@@ -182,7 +216,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       margin: const EdgeInsets.only(left: 4),
                       width: 14,
                       height: 36,
-                      color: Colors.white,
+                      color: kAccentColor,
                     ),
                 ],
               ),
@@ -197,7 +231,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       style: TextStyle(
                         fontFamily: 'monospace',
                         fontSize: 20,
-                        color: Colors.white,
+                        color: kSoftWhite,
                         letterSpacing: 2,
                       ),
                     ),
@@ -208,21 +242,21 @@ class _SplashScreenState extends State<SplashScreen> {
                         style: const TextStyle(
                           fontFamily: 'monospace',
                           fontSize: 20,
-                          color: Colors.white,
+                          color: kSoftWhite,
                           letterSpacing: 2,
                         ),
                         decoration: InputDecoration(
                           hintText: '___',
                           hintStyle: TextStyle(
                             fontFamily: 'monospace',
-                            color: Colors.white.withOpacity(0.3),
+                            color: kSoftWhite.withOpacity(0.3),
                           ),
                           border: InputBorder.none,
                           enabledBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white, width: 2),
+                            borderSide: BorderSide(color: kSoftWhite, width: 2),
                           ),
                           focusedBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white, width: 3),
+                            borderSide: BorderSide(color: kAccentColor, width: 3),
                           ),
                           contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                         ),
@@ -265,7 +299,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   style: const TextStyle(
                     fontFamily: 'monospace',
                     fontSize: 18,
-                    color: Colors.white,
+                    color: kAccentColor,
                     letterSpacing: 2,
                   ),
                 ),

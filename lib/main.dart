@@ -7,6 +7,10 @@ import 'screens/settings_screen.dart';
 import 'screens/friends_screen.dart';
 import 'screens/home_screen.dart';
 
+// App theme colors
+const Color kSoftWhite = Color(0xFFE0E0E0);
+const Color kAccentColor = Color(0xFF00D9FF);
+
 void main() {
   runApp(const EncrypApp());
 }
@@ -21,26 +25,26 @@ class EncrypApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: const ColorScheme.dark(
-          primary: Colors.white,
-          secondary: Colors.white,
+          primary: kAccentColor,
+          secondary: kAccentColor,
           surface: Colors.black,
           error: Colors.red,
           onPrimary: Colors.black,
           onSecondary: Colors.black,
-          onSurface: Colors.white,
-          onError: Colors.white,
+          onSurface: kSoftWhite,
+          onError: kSoftWhite,
           brightness: Brightness.dark,
         ),
         scaffoldBackgroundColor: Colors.black,
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.black,
-          foregroundColor: Colors.white,
+          foregroundColor: kSoftWhite,
           elevation: 0,
           titleTextStyle: TextStyle(
             fontFamily: 'monospace',
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: kSoftWhite,
             letterSpacing: 3,
           ),
         ),
@@ -49,7 +53,7 @@ class EncrypApp extends StatelessWidget {
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16)),
-            side: BorderSide(color: Colors.white, width: 2),
+            side: BorderSide(color: kSoftWhite, width: 2),
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
@@ -57,37 +61,37 @@ class EncrypApp extends StatelessWidget {
           fillColor: Colors.black,
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(12)),
-            borderSide: BorderSide(color: Colors.white, width: 2),
+            borderSide: BorderSide(color: kSoftWhite, width: 2),
           ),
           enabledBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(12)),
-            borderSide: BorderSide(color: Colors.white, width: 2),
+            borderSide: BorderSide(color: kSoftWhite, width: 2),
           ),
           focusedBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(12)),
-            borderSide: BorderSide(color: Colors.white, width: 3),
+            borderSide: BorderSide(color: kAccentColor, width: 3),
           ),
           labelStyle: const TextStyle(
             fontFamily: 'monospace',
-            color: Colors.white,
+            color: kSoftWhite,
             letterSpacing: 2,
           ),
           hintStyle: TextStyle(
             fontFamily: 'monospace',
-            color: Colors.white.withOpacity(0.3),
+            color: kSoftWhite.withOpacity(0.3),
           ),
         ),
         textTheme: const TextTheme(
-          bodyLarge: TextStyle(fontFamily: 'monospace', color: Colors.white),
-          bodyMedium: TextStyle(fontFamily: 'monospace', color: Colors.white),
-          bodySmall: TextStyle(fontFamily: 'monospace', color: Colors.white),
-          titleLarge: TextStyle(fontFamily: 'monospace', color: Colors.white, fontWeight: FontWeight.bold),
-          titleMedium: TextStyle(fontFamily: 'monospace', color: Colors.white, fontWeight: FontWeight.bold),
-          titleSmall: TextStyle(fontFamily: 'monospace', color: Colors.white),
+          bodyLarge: TextStyle(fontFamily: 'monospace', color: kSoftWhite),
+          bodyMedium: TextStyle(fontFamily: 'monospace', color: kSoftWhite),
+          bodySmall: TextStyle(fontFamily: 'monospace', color: kSoftWhite),
+          titleLarge: TextStyle(fontFamily: 'monospace', color: kSoftWhite, fontWeight: FontWeight.bold),
+          titleMedium: TextStyle(fontFamily: 'monospace', color: kSoftWhite, fontWeight: FontWeight.bold),
+          titleSmall: TextStyle(fontFamily: 'monospace', color: kSoftWhite),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
+            backgroundColor: kAccentColor,
             foregroundColor: Colors.black,
             shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
             textStyle: const TextStyle(
@@ -97,11 +101,11 @@ class EncrypApp extends StatelessWidget {
             ),
           ),
         ),
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: kSoftWhite),
         tabBarTheme: const TabBarThemeData(
-          labelColor: Colors.white,
+          labelColor: kAccentColor,
           unselectedLabelColor: Colors.grey,
-          indicatorColor: Colors.white,
+          indicatorColor: kAccentColor,
           labelStyle: TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.bold),
           unselectedLabelStyle: TextStyle(fontFamily: 'monospace'),
         ),
@@ -123,7 +127,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late String _passcode;
-  int _selectedIndex = 0;
+  int _selectedIndex = 2; // Start on HOME page (middle)
   
   @override
   void initState() {
@@ -133,9 +137,9 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> _getScreens() {
     return [
-      const HomeScreen(),
       EncryptTab(passcode: _passcode),
       DecryptTab(passcode: _passcode),
+      const HomeScreen(),
       SavedCredentialsTab(passcode: _passcode),
       const FriendsScreen(),
     ];
@@ -169,8 +173,8 @@ class _HomePageState extends State<HomePage> {
         },
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.black,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white.withOpacity(0.5),
+        selectedItemColor: kAccentColor,
+        unselectedItemColor: kSoftWhite.withOpacity(0.5),
         selectedLabelStyle: const TextStyle(
           fontFamily: 'monospace',
           fontSize: 10,
@@ -183,16 +187,16 @@ class _HomePageState extends State<HomePage> {
         ),
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'HOME',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.lock),
             label: 'ENCRYPT',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.lock_open),
             label: 'DECRYPT',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'HOME',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.save),
@@ -823,12 +827,25 @@ class _SavedCredentialsTabState extends State<SavedCredentialsTab> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.visibility, color: Colors.white),
+                  icon: const Icon(Icons.copy, color: kSoftWhite),
+                  onPressed: () {
+                    Clipboard.setData(ClipboardData(text: credential['password']!));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('> ENCRYPTED PASSWORD COPIED'),
+                        backgroundColor: kAccentColor,
+                      ),
+                    );
+                  },
+                  tooltip: '[COPY]',
+                ),
+                IconButton(
+                  icon: const Icon(Icons.visibility, color: kSoftWhite),
                   onPressed: () => _showDecryptedPassword(credential['password']!),
                   tooltip: '[VIEW]',
                 ),
                 IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.white),
+                  icon: const Icon(Icons.delete, color: kSoftWhite),
                   onPressed: () => _deleteCredential(index),
                   tooltip: '[DELETE]',
                 ),

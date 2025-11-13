@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import '../services/storage_service.dart';
+import '../main.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -44,13 +45,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return const Center(
-        child: CircularProgressIndicator(color: Colors.white),
+        child: CircularProgressIndicator(color: kSoftWhite),
       );
     }
 
     return RefreshIndicator(
       onRefresh: _loadData,
-      color: Colors.white,
+      color: kAccentColor,
       backgroundColor: Colors.black,
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -58,6 +59,37 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // Logo
+            Center(
+              child: Image.asset(
+                'assets/images/logo.png',
+                width: 80,
+                height: 80,
+                color: kSoftWhite,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: kSoftWhite, width: 2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'LVL',
+                        style: TextStyle(
+                          fontFamily: 'monospace',
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: kSoftWhite,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 24),
             // Welcome header
             Card(
               child: Padding(
@@ -69,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: 60,
                       height: 60,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white, width: 2),
+                        border: Border.all(color: kSoftWhite, width: 2),
                         borderRadius: BorderRadius.circular(12),
                         image: _profilePicturePath != null
                             ? DecorationImage(
@@ -88,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontFamily: 'monospace',
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: kSoftWhite,
                                 ),
                               ),
                             )
@@ -104,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: TextStyle(
                               fontFamily: 'monospace',
                               fontSize: 12,
-                              color: Colors.white.withOpacity(0.7),
+                              color: kSoftWhite.withOpacity(0.7),
                               letterSpacing: 1,
                             ),
                           ),
@@ -115,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontFamily: 'monospace',
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: kSoftWhite,
                               letterSpacing: 2,
                             ),
                           ),
@@ -137,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   fontFamily: 'monospace',
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: kSoftWhite,
                   letterSpacing: 2,
                 ),
               ),
@@ -155,12 +187,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white, width: 2),
+                              border: Border.all(color: kSoftWhite, width: 2),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: const Icon(
                               Icons.lock,
-                              color: Colors.white,
+                              color: kSoftWhite,
                               size: 28,
                             ),
                           ),
@@ -171,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontFamily: 'monospace',
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: kSoftWhite,
                               letterSpacing: 1,
                             ),
                           ),
@@ -181,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: TextStyle(
                               fontFamily: 'monospace',
                               fontSize: 10,
-                              color: Colors.white.withOpacity(0.6),
+                              color: kSoftWhite.withOpacity(0.6),
                               letterSpacing: 1,
                             ),
                           ),
@@ -200,12 +232,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white, width: 2),
+                              border: Border.all(color: kSoftWhite, width: 2),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: const Icon(
                               Icons.lock_open,
-                              color: Colors.white,
+                              color: kSoftWhite,
                               size: 28,
                             ),
                           ),
@@ -216,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontFamily: 'monospace',
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: kSoftWhite,
                               letterSpacing: 1,
                             ),
                           ),
@@ -226,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: TextStyle(
                               fontFamily: 'monospace',
                               fontSize: 10,
-                              color: Colors.white.withOpacity(0.6),
+                              color: kSoftWhite.withOpacity(0.6),
                               letterSpacing: 1,
                             ),
                           ),
@@ -252,7 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontFamily: 'monospace',
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white.withOpacity(0.9),
+                        color: kSoftWhite.withOpacity(0.9),
                         letterSpacing: 1,
                       ),
                     ),
@@ -268,7 +300,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 style: TextStyle(
                                   fontFamily: 'monospace',
                                   fontSize: 11,
-                                  color: Colors.white.withOpacity(0.6),
+                                  color: kSoftWhite.withOpacity(0.6),
                                 ),
                               ),
                               const SizedBox(height: 4),
@@ -278,7 +310,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontFamily: 'monospace',
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: kSoftWhite,
                                   letterSpacing: 1,
                                 ),
                               ),
@@ -288,7 +320,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Container(
                           width: 1,
                           height: 40,
-                          color: Colors.white.withOpacity(0.3),
+                          color: kSoftWhite.withOpacity(0.3),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
@@ -300,7 +332,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 style: TextStyle(
                                   fontFamily: 'monospace',
                                   fontSize: 11,
-                                  color: Colors.white.withOpacity(0.6),
+                                  color: kSoftWhite.withOpacity(0.6),
                                 ),
                               ),
                               const SizedBox(height: 4),
@@ -310,7 +342,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontFamily: 'monospace',
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: kSoftWhite,
                                   letterSpacing: 1,
                                 ),
                               ),
@@ -334,7 +366,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: kSoftWhite,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Icon(
@@ -353,7 +385,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: TextStyle(
                               fontFamily: 'monospace',
                               fontSize: 12,
-                              color: Colors.white.withOpacity(0.7),
+                              color: kSoftWhite.withOpacity(0.7),
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -363,7 +395,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontFamily: 'monospace',
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: kSoftWhite,
                               letterSpacing: 1,
                             ),
                           ),
