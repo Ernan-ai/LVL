@@ -126,21 +126,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late String _passcode;
-  int _selectedIndex = 2; // Start on HOME page (middle)
-  
+  int _selectedIndex = 2; // Start at home screen
+  late PageController _pageController;
+
   @override
   void initState() {
     super.initState();
-    _passcode = widget.passcode;
+    _pageController = PageController(initialPage: _selectedIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   List<Widget> _getScreens() {
     return [
-      EncryptTab(passcode: _passcode),
-      DecryptTab(passcode: _passcode),
+      EncryptTab(passcode: widget.passcode),
+      DecryptTab(passcode: widget.passcode),
       const HomeScreen(),
-      SavedCredentialsTab(passcode: _passcode),
+      SavedCredentialsTab(passcode: widget.passcode),
       const FriendsScreen(),
     ];
   }
@@ -163,13 +169,23 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: _getScreens()[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
           setState(() {
             _selectedIndex = index;
           });
+        },
+        children: _getScreens(),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          _pageController.animateToPage(
+            index,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
         },
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.black,
@@ -751,10 +767,18 @@ class _SavedCredentialsTabState extends State<SavedCredentialsTab> {
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.white, width: 2),
               ),
-              child: const Icon(
-                Icons.lock_outline,
-                size: 64,
+              child: Image.asset(
+                'assets/images/logo.png',
+                width: 64,
+                height: 64,
                 color: Colors.white,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(
+                    Icons.lock_outline,
+                    size: 64,
+                    color: Colors.white,
+                  );
+                },
               ),
             ),
             const SizedBox(height: 24),

@@ -102,7 +102,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       } else {
         timer.cancel();
         // After typing is complete
-        Timer(const Duration(milliseconds: 500), () {
+        Timer(const Duration(milliseconds: 800), () {
           setState(() {
             _isTypingComplete = true;
           });
@@ -252,7 +252,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   },
                 ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 16),
               // Typewriter "LVL" text
               Row(
                 mainAxisSize: MainAxisSize.min,
@@ -267,7 +267,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       letterSpacing: 4,
                     ),
                   ),
-                  if (_showCursor && !_showUsernameInput)
+                  if (_showCursor && !_isTypingComplete)
                     Container(
                       margin: const EdgeInsets.only(left: 4),
                       width: 14,
@@ -291,6 +291,13 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         letterSpacing: 2,
                       ),
                     ),
+                    if (!_helloTypingComplete && _showCursor)
+                      Container(
+                        margin: const EdgeInsets.only(left: 4),
+                        width: 10,
+                        height: 20,
+                        color: kAccentColor,
+                      ),
                     if (_helloTypingComplete)
                       Expanded(
                         child: TextField(

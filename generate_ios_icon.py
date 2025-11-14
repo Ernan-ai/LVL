@@ -50,8 +50,8 @@ def create_icon(size, filename):
             # Invert RGB while keeping alpha
             pixels[x, y] = (255 - r, 255 - g, 255 - b, a)
     
-    # Calculate logo size (98% of icon size for maximum impact)
-    logo_size = int(size * 0.98)
+    # Calculate logo size (110% of icon size - will be cropped at edges)
+    logo_size = int(size * 1.10)
     logo_resized = logo.resize((logo_size, logo_size), Image.Resampling.LANCZOS)
     
     # Calculate position to center logo

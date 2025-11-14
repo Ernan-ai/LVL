@@ -331,12 +331,17 @@ class _SettingsScreenState extends State<SettingsScreen> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(color: kSoftWhite),
+      return const Scaffold(
+        backgroundColor: Colors.black,
+        body: Center(
+          child: CircularProgressIndicator(color: kSoftWhite),
+        ),
       );
     }
 
-    return Center(
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Center(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -515,6 +520,7 @@ class _SettingsScreenState extends State<SettingsScreen> with SingleTickerProvid
           ),
         ],
         ),
+      ),
       ),
     );
   }

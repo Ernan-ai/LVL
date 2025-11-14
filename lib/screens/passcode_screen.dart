@@ -276,45 +276,6 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                   ),
                 ),
               ],
-              
-              // Info box
-              const SizedBox(height: 32),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '> HOW IT WORKS:',
-                      style: TextStyle(
-                        fontFamily: 'monospace',
-                        color: Colors.white.withOpacity(0.9),
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      '1. Each digit shifts letters\n'
-                      '2. Pattern repeats per character\n'
-                      '3. Base64 encoding applied\n'
-                      '4. ROT13 final layer',
-                      style: TextStyle(
-                        fontFamily: 'monospace',
-                        color: Colors.white.withOpacity(0.5),
-                        fontSize: 10,
-                        height: 1.5,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ],
           ),
         ),
