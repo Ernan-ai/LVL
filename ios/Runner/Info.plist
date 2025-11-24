@@ -48,6 +48,10 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>LVL needs access to your photo library to set profile pictures</string>
 	<key>NSCameraUsageDescription</key>
-	<string>LVL needs access to your camera to take profile pictures</string>
+	<string>LVL needs access to your camera to take profile pictures and scan QR codes for secure data transfer</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>LVL uses Face ID to securely authenticate and protect your encrypted vault</string>
+	<!-- NO INTERNET ACCESS - This app works 100% offline -->
+	<!-- Zero analytics, zero cloud, zero tracking -->
 </dict>
 </plist>

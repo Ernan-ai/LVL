@@ -1,6 +1,6 @@
 {
-    "name": "encryp_app",
-    "short_name": "encryp_app",
+    "name": "lvl",
+    "short_name": "lvl",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
