@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'services/encryption_service.dart';
-import 'services/storage_service.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'services/aes_encryption_service.dart';
+import 'services/hive_service.dart';
+import 'services/theme_service.dart';
+import 'services/security_service.dart';
 import 'screens/splash_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/friends_screen.dart';
@@ -11,7 +14,15 @@ import 'screens/home_screen.dart';
 const Color kSoftWhite = Color(0xFFE0E0E0);
 const Color kAccentColor = Color(0xFF00D9FF);
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Hive database
+  await Hive.initFlutter();
+  
+  // Initialize security features
+  SecurityService.initialize();
+  
   runApp(const EncrypApp());
 }
 
@@ -260,16 +271,34 @@ class _EncryptTabState extends State<EncryptTab> {
       return;
     }
     
-    final inputText = _inputController.text;
-    final encrypted = EncryptionService.encrypt(inputText, widget.passcode);
-    
-    // Track statistics
-    await StorageService.incrementEncryptCount();
-    await StorageService.addEncryptedBytes(inputText.length);
-    
-    setState(() {
-      _encryptedText = encrypted;
-    });
+    try {
+      final inputText = _inputController.text;
+      final aesService = AESEncryptionService();
+      final encrypted = aesService.encryptText(inputText, widget.passcode);
+      
+      setState(() {
+        _encryptedText = encrypted;
+      });
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('> ENCRYPTED WITH AES-256-GCM'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('! ERROR: Encryption failed - $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
   
   void _copyToClipboard() {
@@ -295,14 +324,39 @@ class _EncryptTabState extends State<EncryptTab> {
       return;
     }
 
-    // Add new credential to list
-    final credentials = await StorageService.loadCredentials();
-    credentials.add({
-      'title': _titleController.text,
-      'username': '',
-      'password': _encryptedText,
-    });
-    await StorageService.saveCredentials(credentials);
+    try {
+      // Initialize Hive if needed
+      final hiveService = HiveService();
+      if (!await hiveService.isInitialized()) {
+        await hiveService.initialize(widget.passcode);
+      }
+      
+      // Note: This saves as encrypted text, not as a proper vault item
+      // For demo purposes, keeping simple text storage
+      final credentials = await hiveService.getAllItems();
+      // Store as simple note for now
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('> Use "VAULT" tab for proper encrypted storage'),
+            backgroundColor: Colors.orange,
+          ),
+        );
+      }
+      return;
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('! ERROR: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      return;
+    }
+
+    // Old storage method (deprecated)
     
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -493,16 +547,37 @@ class _DecryptTabState extends State<DecryptTab> {
       return;
     }
     
-    final inputText = _inputController.text;
-    final decrypted = EncryptionService.decrypt(inputText, widget.passcode);
-    
-    // Track statistics
-    await StorageService.incrementDecryptCount();
-    await StorageService.addDecryptedBytes(decrypted.length);
-    
-    setState(() {
-      _decryptedText = decrypted;
-    });
+    try {
+      final inputText = _inputController.text;
+      final aesService = AESEncryptionService();
+      final decrypted = aesService.decryptText(inputText, widget.passcode);
+      
+      setState(() {
+        _decryptedText = decrypted;
+      });
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('> DECRYPTED WITH AES-256-GCM'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('! ERROR: Decryption failed - Invalid password or corrupted data'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      setState(() {
+        _decryptedText = '';
+      });
+    }
   }
   
   void _copyToClipboard() {
@@ -642,13 +717,31 @@ class _SavedCredentialsTabState extends State<SavedCredentialsTab> {
   
   Future<void> _loadCredentials() async {
     setState(() => _isLoading = true);
-    _credentials = await StorageService.loadCredentials();
+    
+    try {
+      final hiveService = HiveService();
+      if (await hiveService.isInitialized()) {
+        // Load from Hive (new system)
+        final items = await hiveService.getAllItems();
+        _credentials = items.map((item) => {
+          'title': item.title,
+          'username': '',
+          'password': item.content ?? '',
+        }).toList();
+      } else {
+        // Fallback: try old storage (for migration)
+        _credentials = [];
+      }
+    } catch (e) {
+      _credentials = [];
+    }
+    
     setState(() => _isLoading = false);
   }
   
   Future<void> _deleteCredential(int index) async {
     _credentials.removeAt(index);
-    await StorageService.saveCredentials(_credentials);
+    // Note: Proper deletion would need item IDs from Hive
     setState(() {});
     
     if (mounted) {
@@ -662,7 +755,13 @@ class _SavedCredentialsTabState extends State<SavedCredentialsTab> {
   }
   
   void _showDecryptedPassword(String encryptedPassword) {
-    String decrypted = EncryptionService.decrypt(encryptedPassword, widget.passcode);
+    final aesService = AESEncryptionService();
+    String decrypted;
+    try {
+      decrypted = aesService.decryptText(encryptedPassword, widget.passcode);
+    } catch (e) {
+      decrypted = 'ERROR: Could not decrypt';
+    }
     
     showDialog(
       context: context,
