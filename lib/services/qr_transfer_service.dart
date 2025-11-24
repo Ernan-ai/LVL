@@ -208,8 +208,6 @@ class QRTransferService {
         return VaultItemType.password;
       case 'VaultItemType.token':
         return VaultItemType.token;
-      case 'VaultItemType.key':
-        return VaultItemType.key;
       case 'VaultItemType.script':
         return VaultItemType.script;
       case 'VaultItemType.file':
