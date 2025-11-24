@@ -27,7 +27,7 @@ class HiveService {
       Hive.registerAdapter(VaultItemAdapter());
     }
     if (!Hive.isAdapterRegistered(1)) {
-      Hive.registerAdapter(VaultItemTypeAdapterAdapter());
+      Hive.registerAdapter(VaultItemTypeAdapter());
     }
   }
 

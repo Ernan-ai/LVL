@@ -3,12 +3,17 @@ import 'package:hive/hive.dart';
 part 'vault_item.g.dart';
 
 /// Type of vault item
+@HiveType(typeId: 1)
 enum VaultItemType {
+  @HiveField(0)
   note,
+  @HiveField(1)
   password,
+  @HiveField(2)
   token,
-  key,
+  @HiveField(3)
   script,
+  @HiveField(4)
   file,
 }
 
